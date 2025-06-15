@@ -8,6 +8,7 @@ from datetime import datetime
 from typing import Optional, List
 import os
 import shutil
+import logging
 
 from .models import Task, TaskStatus
 from .storage import STORAGE_FILE, backup_tasks, remove_storage_file
@@ -44,9 +45,14 @@ def create_task_table(tasks_to_show: List[Task], title: Optional[str] = None) ->
     return table
 
 @click.group()
+@click.option('-v', '--verbose', is_flag=True, help='Enable verbose (debug) output')
 @click.pass_context
-def cli(ctx):
+def cli(ctx, verbose):
     """Talia CLI - A simple and elegant task management application."""
+    if verbose:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.WARNING)
     if not ctx.obj:
         ctx.obj = TaskRepo(STORAGE_FILE)
 
@@ -74,10 +80,10 @@ def add(repo: TaskRepo, title: str):
         console.print("❌ Failed to add task", style="red")
 
 @cli.command()
-@click.option('--status', '-s', type=click.Choice([s.name for s in TaskStatus], case_sensitive=False), help='Filter tasks by status')
+@click.argument('status', required=False, type=click.Choice([s.name for s in TaskStatus], case_sensitive=False))
 @click.pass_obj
 def list(repo: TaskRepo, status: Optional[str]):
-    """List all tasks, optionally filtered by status."""
+    """List all tasks, optionally filtered by status. Example: talia list inbox"""
     status_msg = f" with status {status}" if status else ""
     filtered_tasks = repo.all
     if status:
