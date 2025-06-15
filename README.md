@@ -24,6 +24,38 @@ Task List CLI - A simple and elegant task management application.
 pip install .
 ```
 
+## Creating a Shortcut (tl)
+
+You can create a shortcut `tl` for the `talia` command. Here's how to do it:
+
+### macOS/Linux
+
+1. Create a shell script in `/usr/local/bin`:
+   ```bash
+   sudo sh -c 'echo "#!/bin/bash\nsource /path/to/your/venv/bin/activate\ntalia \"\$@\"" > /usr/local/bin/tl && chmod +x /usr/local/bin/tl'
+   ```
+   Replace `/path/to/your/venv` with the actual path to your virtual environment.
+
+2. Test the shortcut:
+   ```bash
+   tl --help
+   ```
+
+### Windows
+
+1. Create a batch file named `tl.bat` in a directory that's in your PATH:
+   ```batch
+   @echo off
+   call path\to\your\venv\Scripts\activate.bat
+   talia %*
+   ```
+   Replace `path\to\your\venv` with the actual path to your virtual environment.
+
+2. Test the shortcut:
+   ```batch
+   tl --help
+   ```
+
 ## Usage
 
 ### Basic Commands

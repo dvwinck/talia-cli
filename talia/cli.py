@@ -74,14 +74,14 @@ def add(repo: TaskRepo, title: str):
         console.print("❌ Failed to add task", style="red")
 
 @cli.command()
-@click.option('--status', '-s', type=click.Choice([s.name for s in TaskStatus]), help='Filter tasks by status')
+@click.option('--status', '-s', type=click.Choice([s.name for s in TaskStatus], case_sensitive=False), help='Filter tasks by status')
 @click.pass_obj
 def list(repo: TaskRepo, status: Optional[str]):
     """List all tasks, optionally filtered by status."""
     status_msg = f" with status {status}" if status else ""
     filtered_tasks = repo.all
     if status:
-        filtered_tasks = [t for t in repo.all if t.status.name == status]
+        filtered_tasks = [t for t in repo.all if t.status.name.upper() == status.upper()]
     
     if not filtered_tasks:
         logger.info(f"No tasks found{status_msg}")
