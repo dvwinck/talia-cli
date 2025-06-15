@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "talia"
+version = "0.2.0"
+description = "Task List CLI - A simple and elegant task management application"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    { name = "Diogo Winck", email = "diogo.winck@gmail.com" }
+]
+dependencies = [
+    "click>=8.0.0",
+    "rich>=10.0.0",
+]
+
+[project.scripts]
+talia = "talia.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["talia"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --cov=talia --cov-report=term-missing"
+
+[tool.coverage.run]
+source = ["talia"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "pass",
+    "@abstractmethod"
+] 
